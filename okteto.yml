@@ -22,12 +22,10 @@ build:
   #   target: dev
 
 deploy:
-  - name: Export git root
-    command: export GIT_ROOT=somethingnotreal
-  - name: Echo git root
-    command: echo ${GIT_ROOT}
-  - name: Install postgresql
-    command: helm upgrade --install postgresql postgresql/postgresql-11.6.21.tgz -f "${GIT_ROOT}/postgresql/values.yml" --version 11.6.21
+  - echo "GIT_ROOT=$(git rev-parse --show-toplevel)" >> $OKTETO_ENV
+  - echo ${GIT_ROOT}
+  - cat ${OKTETO_ENV}
+  - helm upgrade --install postgresql postgresql/postgresql-11.6.21.tgz -f "${GIT_ROOT}/postgresql/values.yml" --version 11.6.21
 
   # - name: Deploy PostgreSQL
   #   command: helm upgrade --install postgresql postgresql/postgresql-11.6.21.tgz -f postgresql/values.yml --version 11.6.21
